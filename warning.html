@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚠️ Cảnh Báo Bảo Mật - SecureGuard Pro</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .warning-container {
+      max-width: 700px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .warning-header {
+      background: #dc2626;
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .warning-icon {
+      font-size: 80px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    .warning-header h1 {
+      font-size: 32px;
+      margin: 20px 0 10px;
+    }
+
+    .warning-header p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .warning-content {
+      padding: 40px;
+    }
+
+    .threat-info {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+    }
+
+    .threat-info h2 {
+      color: #dc2626;
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .threat-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .threat-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid #fee2e2;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .threat-list li:last-child {
+      border-bottom: none;
+    }
+
+    .threat-icon {
+      font-size: 20px;
+    }
+
+    .url-display {
+      background: #f3f4f6;
+      padding: 15px;
+      border-radius: 8px;
+      word-break: break-all;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #374151;
+      margin: 20px 0;
+    }
+
+    .warning-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #b91c1c;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .btn-secondary:hover {
+      background: #d1d5db;
+    }
+
+    .info-box {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 8px;
+    }
+
+    .info-box h3 {
+      color: #1e40af;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .info-box ul {
+      padding-left: 20px;
+      color: #1e3a8a;
+    }
+
+    .info-box li {
+      margin: 8px 0;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #f9fafb;
+      color: #6b7280;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="warning-container">
+    <div class="warning-header">
+      <div class="warning-icon">⚠️</div>
+      <h1>Trang Web Nguy Hiểm!</h1>
+      <p>SecureGuard Pro đã chặn truy cập vì phát hiện mối đe dọa</p>
+    </div>
+
+    <div class="warning-content">
+      <div class="threat-info">
+        <h2>🔍 Mối Đe Dọa Phát Hiện:</h2>
+        <ul class="threat-list">
+          <li>
+            <span class="threat-icon">🦠</span>
+            <span>Trang web có thể chứa malware hoặc virus</span>
+          </li>
+          <li>
+            <span class="threat-icon">🎣</span>
+            <span>Có dấu hiệu phishing - cố gắng đánh cắp thông tin</span>
+          </li>
+          <li>
+            <span class="threat-icon">🚫</span>
+            <span>Nằm trong danh sách đen các trang web độc hại</span>
+          </li>
+          <li>
+            <span class="threat-icon">⚡</span>
+            <span>Có thể tải xuống file nguy hiểm tự động</span>
+          </li>
+        </ul>
+      </div>
+
+      <p><strong>URL bị chặn:</strong></p>
+      <div class="url-display" id="blockedUrl">Loading...</div>
+
+      <div class="warning-actions">
+        <button class="btn btn-primary" id="goBackBtn">
+          <span>🔙</span>
+          <span>Quay Lại An Toàn</span>
+        </button>
+        <button class="btn btn-secondary" id="detailsBtn">
+          <span>📋</span>
+          <span>Chi Tiết</span>
+        </button>
+      </div>
+
+      <div class="info-box">
+        <h3>💡 Khuyến Nghị An Toàn:</h3>
+        <ul>
+          <li>Không bao giờ nhập mật khẩu hoặc thông tin cá nhân trên các trang đáng ngờ</li>
+          <li>Kiểm tra kỹ URL trước khi truy cập</li>
+          <li>Chỉ tải xuống file từ nguồn tin cậy</li>
+          <li>Cập nhật trình duyệt và phần mềm bảo mật thường xuyên</li>
+          <li>Sử dụng mật khẩu mạnh và khác nhau cho mỗi tài khoản</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      Được bảo vệ bởi SecureGuard Pro v1.0.0<br>
+      Extension bảo mật toàn diện cho trình duyệt
+    </div>
+  </div>
+
+  <script>
+    // Get blocked URL from query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const blockedUrl = urlParams.get('url');
+    
+    if (blockedUrl) {
+      document.getElementById('blockedUrl').textContent = decodeURIComponent(blockedUrl);
+    }
+
+    // Go back button
+    document.getElementById('goBackBtn').addEventListener('click', () => {
+      window.history.back();
+    });
+
+    // Details button
+    document.getElementById('detailsBtn').addEventListener('click', () => {
+      alert('Chi tiết kỹ thuật:\n\n' +
+            '• Trang web được đánh dấu là nguy hiểm\n' +
+            '• Thời gian phát hiện: ' + new Date().toLocaleString('vi-VN') + '\n' +
+            '• Mức độ nguy hiểm: Cao\n' +
+            '• Khuyến nghị: Không truy cập');
+    });
+  </script>
+</body>
+</html>

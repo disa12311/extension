@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 380px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 0;
+    }
+
+    .header {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .status-card {
+      margin: 15px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 20px;
+      color: #333;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .status-text {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .status-dot.active {
+      background: #10b981;
+    }
+
+    .status-dot.inactive {
+      background: #ef4444;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .toggle-btn {
+      width: 60px;
+      height: 30px;
+      background: #e5e7eb;
+      border-radius: 15px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .toggle-btn.active {
+      background: #10b981;
+    }
+
+    .toggle-btn::after {
+      content: '';
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle-btn.active::after {
+      transform: translateX(30px);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-item {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .feature-list {
+      margin-top: 15px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: #f9fafb;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      transition: all 0.3s;
+    }
+
+    .feature-item:hover {
+      background: #f3f4f6;
+      transform: translateX(5px);
+    }
+
+    .feature-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 6px;
+      color: white;
+      font-size: 12px;
+    }
+
+    .feature-toggle {
+      width: 44px;
+      height: 22px;
+      background: #d1d5db;
+      border-radius: 11px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .feature-toggle.active {
+      background: #667eea;
+    }
+
+    .feature-toggle::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+    }
+
+    .feature-toggle.active::after {
+      transform: translateX(22px);
+    }
+
+    .scan-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 15px;
+    }
+
+    .scan-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .scan-btn:active {
+      transform: translateY(0);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 11px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🛡️ SecureGuard Pro</h1>
+    <p>Bảo vệ toàn diện cho trình duyệt</p>
+  </div>
+
+  <div class="status-card">
+    <div class="status-indicator">
+      <div class="status-text">
+        <div class="status-dot active" id="statusDot"></div>
+        <span id="statusText">Đang Bảo Vệ</span>
+      </div>
+      <div class="toggle-btn active" id="mainToggle"></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value" id="blockedCount">0</div>
+        <div class="stat-label">Chặn Tracker</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="threatCount">0</div>
+        <div class="stat-label">Phát Hiện Mối Đe Dọa</div>
+      </div>
+    </div>
+
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-name">
+          <div class="feature-icon">🚫</div>
+          <span>Anti-Tracking</span>
+        </div>
+        <div class="feature-toggle active" data-feature="tracking"></div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-name">
+          <div class="feature-icon">🦠</div>
+          <span>Chặn Malware</span>
+        </div>
+        <div class="feature-toggle active" data-feature="malware"></div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-name">
+          <div class="feature-icon">🎣</div>
+          <span>Anti-Phishing</span>
+        </div>
+        <div class="feature-toggle active" data-feature="phishing"></div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-name">
+          <div class="feature-icon">🔒</div>
+          <span>HTTPS Force</span>
+        </div>
+        <div class="feature-toggle active" data-feature="https"></div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-name">
+          <div class="feature-icon">🍪</div>
+          <span>Xóa Cookie Tự Động</span>
+        </div>
+        <div class="feature-toggle active" data-feature="cookies"></div>
+      </div>
+    </div>
+
+    <button class="scan-btn" id="scanBtn">
+      🔍 Quét Trang Hiện Tại
+    </button>
+  </div>
+
+  <div class="footer">
+    Phiên bản 1.0.0 | Được bảo vệ bởi SecureGuard
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
