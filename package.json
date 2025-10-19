@@ -1,0 +1,30 @@
+{
+  "name": "secureguard-pro",
+  "version": "1.0.0",
+  "description": "Browser security extension with TypeScript",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
+  },
+  "keywords": [
+    "security",
+    "privacy",
+    "browser-extension",
+    "typescript",
+    "chrome-extension"
+  ],
+  "author": "SecureGuard Pro Team",
+  "license": "MIT"
+}

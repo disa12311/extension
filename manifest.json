@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "SecureGuard Pro",
-  "version": "1.0.0",
-  "description": "Extension bảo mật toàn diện với chống tracking, phát hiện malware và mã hóa",
+  "version": "2.0.0",
+  "description": "Extension bảo mật toàn diện với TypeScript - chống tracking, phát hiện malware và bảo vệ real-time",
   "permissions": [
     "storage",
     "tabs",
@@ -27,8 +27,7 @@
     ]
   },
   "background": {
-    "service_worker": "background.js",
-    "type": "module"
+    "service_worker": "dist/background.js"
   },
   "action": {
     "default_popup": "popup.html",
@@ -41,7 +40,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "js": ["dist/content.js"],
       "run_at": "document_start"
     }
   ],
@@ -52,7 +51,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["injected.js"],
+      "resources": ["warning.html"],
       "matches": ["<all_urls>"]
     }
   ]

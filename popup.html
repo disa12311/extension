@@ -12,13 +12,13 @@
     body {
       width: 380px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1e3a5f 0%, #2d5a7b 50%, #1e3a5f 100%);
       color: white;
       padding: 0;
     }
 
     .header {
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.3);
       padding: 20px;
       text-align: center;
       border-bottom: 2px solid rgba(255, 255, 255, 0.1);
@@ -117,11 +117,12 @@
     }
 
     .stat-item {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #2d5a7b 0%, #1e3a5f 100%);
       padding: 15px;
       border-radius: 10px;
       text-align: center;
       color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
     .stat-value {
@@ -169,7 +170,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #2d5a7b 0%, #1e3a5f 100%);
       border-radius: 6px;
       color: white;
       font-size: 12px;
@@ -186,7 +187,7 @@
     }
 
     .feature-toggle.active {
-      background: #667eea;
+      background: #2d5a7b;
     }
 
     .feature-toggle::after {
@@ -208,7 +209,7 @@
     .scan-btn {
       width: 100%;
       padding: 15px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #2d5a7b 0%, #1e3a5f 100%);
       border: none;
       border-radius: 10px;
       color: white;
@@ -217,15 +218,21 @@
       cursor: pointer;
       transition: all 0.3s;
       margin-top: 15px;
+      box-shadow: 0 4px 12px rgba(30, 58, 95, 0.4);
     }
 
     .scan-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 6px 20px rgba(30, 58, 95, 0.6);
     }
 
     .scan-btn:active {
       transform: translateY(0);
+    }
+
+    .scan-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .footer {
@@ -234,12 +241,23 @@
       font-size: 11px;
       opacity: 0.7;
     }
+
+    .ts-badge {
+      display: inline-block;
+      background: #3178c6;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: bold;
+      margin-left: 5px;
+    }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>🛡️ SecureGuard Pro</h1>
-    <p>Bảo vệ toàn diện cho trình duyệt</p>
+    <h1>🛡️ SecureGuard Pro <span class="ts-badge">TS</span></h1>
+    <p>Bảo vệ toàn diện với TypeScript</p>
   </div>
 
   <div class="status-card">
@@ -297,10 +315,10 @@
 
       <div class="feature-item">
         <div class="feature-name">
-          <div class="feature-icon">🍪</div>
-          <span>Xóa Cookie Tự Động</span>
+          <div class="feature-icon">⚡</div>
+          <span>Bảo Vệ Thời Gian Thực</span>
         </div>
-        <div class="feature-toggle active" data-feature="cookies"></div>
+        <div class="feature-toggle active" data-feature="realtime"></div>
       </div>
     </div>
 
@@ -310,9 +328,9 @@
   </div>
 
   <div class="footer">
-    Phiên bản 1.0.0 | Được bảo vệ bởi SecureGuard
+    Phiên bản 2.0.0 (TypeScript) | Được bảo vệ bởi SecureGuard
   </div>
 
-  <script src="popup.js"></script>
+  <script src="dist/popup.js"></script>
 </body>
 </html>
