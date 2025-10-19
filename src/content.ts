@@ -248,7 +248,7 @@ function monitorSuspiciousBehaviors(): void {
   };
 
   // Detect clipboard hijacking attempts
-  document.addEventListener('copy', (e: ClipboardEvent): void => {
+  document.addEventListener('copy', (_e: ClipboardEvent): void => {
     const selection = window.getSelection()?.toString() || '';
     setTimeout((): void => {
       navigator.clipboard.readText().then((clipboardText: string): void => {
@@ -344,7 +344,7 @@ function preventClickjacking(): void {
 
 // Listen for messages from background
 chrome.runtime.onMessage.addListener(
-  (message: MessageAction, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void): boolean => {
+  (message: MessageAction, _sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void): boolean => {
     if (message.action === 'checkSecurity') {
       const result = performSecurityCheck();
       sendResponse(result);

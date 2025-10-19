@@ -56,17 +56,18 @@ async function enableStaticRules(): Promise<void> {
 
 // ===== STATISTICS TRACKING =====
 chrome.webRequest?.onBeforeRequest.addListener(
-  async (details: chrome.webRequest.WebRequestBodyDetails): Promise<void> => {
-    const settings = await getSettings(['isEnabled', 'trackingEnabled']);
-    if (!settings.isEnabled || !settings.trackingEnabled) return;
+  (details: chrome.webRequest.WebRequestBodyDetails): void => {
+    getSettings(['isEnabled', 'trackingEnabled']).then(settings => {
+      if (!settings.isEnabled || !settings.trackingEnabled) return;
 
-    const url = details.url.toLowerCase();
-    const isTracking = TRACKING_KEYWORDS.some(keyword => url.includes(keyword));
+      const url = details.url.toLowerCase();
+      const isTracking = TRACKING_KEYWORDS.some(keyword => url.includes(keyword));
 
-    if (isTracking) {
-      await incrementBlockedCount();
-      notifyPopupUpdate();
-    }
+      if (isTracking) {
+        incrementBlockedCount();
+        notifyPopupUpdate();
+      }
+    });
   },
   { urls: ['<all_urls>'] }
 );
@@ -182,7 +183,7 @@ chrome.notifications?.onButtonClicked?.addListener(
 
 // ===== MESSAGE HANDLERS =====
 chrome.runtime.onMessage.addListener(
-  (message: MessageAction, sender: chrome.runtime.MessageSender, sendResponse: (response: MessageResponse) => void): boolean => {
+  (message: MessageAction, _sender: chrome.runtime.MessageSender, sendResponse: (response: MessageResponse) => void): boolean => {
     if (message.action === 'toggleProtection') {
       handleToggleProtection(message.enabled!).then(() => {
         sendResponse({ success: true });
@@ -382,11 +383,12 @@ async function scanPage(tabId: number, url: string): Promise<ScanResult> {
           func: checkPageContent
         });
 
-        if (results?.[0]?.result?.suspiciousElements > 0) {
+        const suspiciousCount = results?.[0]?.result?.suspiciousElements;
+        if (suspiciousCount && suspiciousCount > 0) {
           issues.push({
             type: 'suspicious-content',
             severity: 'medium',
-            message: `${results[0].result.suspiciousElements} suspicious elements found`
+            message: `${suspiciousCount} suspicious elements found`
           });
         }
       } catch (scriptError) {

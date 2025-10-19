@@ -45,7 +45,7 @@ export interface PageContentResult {
 }
 
 export interface MessageAction {
-  action: 'toggleProtection' | 'toggleFeature' | 'scanPage' | 'updateStats' | 'suspiciousBehavior';
+  action: 'toggleProtection' | 'toggleFeature' | 'scanPage' | 'updateStats' | 'suspiciousBehavior' | 'checkSecurity';
   enabled?: boolean;
   feature?: string;
   tabId?: number;
