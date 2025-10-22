@@ -16,7 +16,12 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["chrome"]
+    "types": ["chrome"],
+    "sourceMap": true,
+    "inlineSourceMap": false,
+    "inlineSources": false,
+    "declaration": false,
+    "removeComments": false
   },
   "include": [
     "src/**/*"
