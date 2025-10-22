@@ -312,14 +312,20 @@ Sau khi build, structure sẽ như sau:
 ```
 dist/
 ├── types.js           # Compiled type definitions (empty at runtime)
-├── types.js.map      # Source map
-├── background.js     # Compiled background worker
-├── background.js.map # Source map
-├── popup.js          # Compiled popup
-├── popup.js.map      # Source map
-├── content.js        # Compiled content script
-└── content.js.map    # Source map
+├── types.js.map       # Source map for debugging
+├── background.js      # Compiled background worker
+├── background.js.map  # Source map for debugging
+├── popup.js           # Compiled popup
+├── popup.js.map       # Source map for debugging
+├── content.js         # Compiled content script
+└── content.js.map     # Source map for debugging
 ```
+
+### Source Maps
+Source maps (.map files) cho phép debug TypeScript code trực tiếp trong Chrome DevTools:
+- Set breakpoints trong `.ts` files thay vì `.js`
+- Stack traces hiển thị line numbers từ TypeScript
+- View original TypeScript code trong Sources tab
 
 **Lưu ý**: manifest.json trỏ đến files trong `dist/`:
 

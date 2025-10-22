@@ -105,14 +105,21 @@ Sau khi build, bạn sẽ thấy:
 ```
 dist/
 ├── types.js
-├── types.js.map
+├── types.js.map          ✅ Source map for debugging
 ├── background.js
-├── background.js.map
+├── background.js.map     ✅ Source map for debugging
 ├── popup.js
-├── popup.js.map
+├── popup.js.map          ✅ Source map for debugging
 ├── content.js
-└── content.js.map
+└── content.js.map        ✅ Source map for debugging
 ```
+
+### 🗺️ Source Maps
+Files `.map` giúp debug TypeScript trực tiếp trong Chrome DevTools:
+- **Breakpoints**: Set trong `.ts` files thay vì `.js`
+- **Stack traces**: Hiển thị line numbers từ TypeScript
+- **Sources tab**: View original TypeScript code
+- **No performance impact**: Chỉ load khi DevTools mở
 
 ### Nếu Có Lỗi Build
 
@@ -325,11 +332,25 @@ zip -r secureguard-pro-v2.zip . -x "node_modules/*" -x "src/*" -x ".git/*"
 2. "Manage Extension"
 3. "Inspect views: service worker"
 4. Check Console tab
+5. **Sources tab**: Bạn sẽ thấy `src/` folder với TypeScript files! 🎉
 
 **Popup:**
 1. Right-click popup
 2. "Inspect"
 3. Check Console tab
+4. **Sources tab**: Debug TypeScript code trực tiếp
+
+### Debugging với Source Maps
+
+**Set Breakpoint trong TypeScript:**
+1. Open DevTools (F12)
+2. Sources tab → `src/background.ts`
+3. Click line number để set breakpoint
+4. Breakpoint sẽ work trên TypeScript code!
+
+**View Stack Trace:**
+- Errors sẽ hiển thị: `background.ts:123` (TypeScript line)
+- Không phải: `background.js:456` (JavaScript line)
 
 ### Common Commands
 
@@ -346,6 +367,9 @@ npx tsc --version
 
 # Check for type errors without building
 npx tsc --noEmit
+
+# Build without source maps (production)
+npx tsc --sourceMap false
 ```
 
 ## ✅ Success Indicators
