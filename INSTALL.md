@@ -27,7 +27,6 @@ cd secureguard-pro-typescript
 
 # Tạo cấu trúc thư mục
 mkdir src
-mkdir dist
 mkdir icons
 ```
 
@@ -47,6 +46,7 @@ Copy các files sau vào root directory:
 - `warning.html`
 - `rules.json`
 - `README-TypeScript.md`
+- `INSTALL.md`
 
 ### 2.2 Source Files (src/)
 
@@ -59,7 +59,7 @@ Copy các files TypeScript vào `src/`:
 
 ### 2.3 Icons
 
-Sử dụng icon generator để tạo 3 icons:
+Tạo thư mục `icons/` và thêm 3 icons:
 
 - `icons/icon16.png`
 - `icons/icon48.png`
@@ -70,9 +70,6 @@ Sử dụng icon generator để tạo 3 icons:
 ```bash
 # Install tất cả dependencies
 npm install
-
-# Hoặc nếu dùng yarn
-yarn install
 ```
 
 Quá trình này sẽ cài:
@@ -86,40 +83,57 @@ Quá trình này sẽ cài:
 added 150 packages in 15s
 ```
 
-## 🏗️ Step 4: Build TypeScript
+## 🏗️ Step 4: Build Project
 
 ```bash
-# Build lần đầu
+# Build TypeScript + Copy assets
 npm run build
 ```
 
 **Expected output:**
 ```
 > secureguard-pro@1.0.0 build
-> tsc
+> tsc && npm run copy-assets
 
-✓ Successfully compiled TypeScript
+✓ TypeScript compiled successfully
+
+> secureguard-pro@1.0.0 copy-assets
+> npm run copy-html && npm run copy-json && npm run copy-icons
+
+✓ HTML files copied
+✓ JSON files copied
+✓ Icons copied
 ```
 
-Sau khi build, bạn sẽ thấy:
+Sau khi build, cấu trúc `dist/` sẽ như sau:
+
 ```
 dist/
 ├── types.js
-├── types.js.map          ✅ Source map for debugging
+├── types.js.map
 ├── background.js
-├── background.js.map     ✅ Source map for debugging
+├── background.js.map
 ├── popup.js
-├── popup.js.map          ✅ Source map for debugging
+├── popup.js.map
 ├── content.js
-└── content.js.map        ✅ Source map for debugging
+├── content.js.map
+├── popup.html           ✅ Copied from root
+├── warning.html         ✅ Copied from root
+├── rules.json          ✅ Copied from root
+├── manifest.json       ✅ Copied from root
+└── icons/              ✅ Copied from root
+    ├── icon16.png
+    ├── icon48.png
+    └── icon128.png
 ```
 
-### 🗺️ Source Maps
-Files `.map` giúp debug TypeScript trực tiếp trong Chrome DevTools:
-- **Breakpoints**: Set trong `.ts` files thay vì `.js`
-- **Stack traces**: Hiển thị line numbers từ TypeScript
-- **Sources tab**: View original TypeScript code
-- **No performance impact**: Chỉ load khi DevTools mở
+### 🗺️ Tại Sao Copy Assets?
+
+- **HTML files**: Extension cần `popup.html` và `warning.html` để hiển thị UI
+- **JSON files**: 
+  - `rules.json` - Chứa rules chặn tracking
+  - `manifest.json` - Chrome extension manifest
+- **Icons**: Extension icons cho toolbar và settings
 
 ### Nếu Có Lỗi Build
 
@@ -129,15 +143,34 @@ Files `.map` giúp debug TypeScript trực tiếp trong Chrome DevTools:
 npm install --save-dev @types/chrome
 ```
 
-#### Error: Cannot find module './types'
+#### Error: cp command not found (Windows)
 
-- Đảm bảo `types.ts` có trong `src/`
-- Chạy lại `npm run build`
+Nếu bạn dùng Windows, update `package.json`:
 
-#### Error: TS2304: Cannot find name
+```json
+"scripts": {
+  "copy-html": "copy popup.html warning.html dist\\",
+  "copy-json": "copy rules.json manifest.json dist\\",
+  "copy-icons": "xcopy /E /I icons dist\\icons"
+}
+```
 
-- Kiểm tra `tsconfig.json` có đúng
-- Verify `"lib": ["ES2020", "DOM"]` trong tsconfig
+Hoặc cài `npm-run-all`:
+
+```bash
+npm install --save-dev npm-run-all
+```
+
+Rồi update scripts:
+
+```json
+"scripts": {
+  "build": "tsc && npm-run-all copy-*",
+  "copy-html": "cpy popup.html warning.html dist",
+  "copy-json": "cpy rules.json manifest.json dist",
+  "copy-icons": "cpy icons/** dist"
+}
+```
 
 ## 🌐 Step 5: Load Extension
 
@@ -150,8 +183,10 @@ npm install --save-dev @types/chrome
 ### 5.2 Load Unpacked Extension
 
 1. Click **Load unpacked**
-2. Navigate đến thư mục project root
+2. Navigate đến thư mục project root (chứa manifest.json)
 3. Click **Select Folder**
+
+**LÀM RÕ**: Load thư mục **ROOT** của project, KHÔNG phải thư mục `dist/`. Chrome sẽ tự động đọc `manifest.json` ở root và load files từ `dist/` theo đường dẫn trong manifest.
 
 ### 5.3 Verify Installation
 
@@ -199,16 +234,22 @@ npm run watch
 
 Giờ TypeScript sẽ tự động compile khi bạn save files!
 
-**Workflow:**
-1. Edit `src/background.ts`
-2. Save (Ctrl+S)
-3. TypeScript auto-compile
-4. Reload extension trong Chrome
-5. Test changes
-
-### Manual Build
+**Lưu ý**: Watch mode CHỈ compile TypeScript. Nếu bạn sửa `.html` hoặc `.json`, phải chạy:
 
 ```bash
+npm run copy-assets
+```
+
+### Full Rebuild
+
+```bash
+npm run build
+```
+
+### Clean Build
+
+```bash
+npm run clean
 npm run build
 ```
 
@@ -230,59 +271,64 @@ npm run format
 
 **Solution**:
 ```bash
-# Verify manifest.json exists in root
+# Verify manifest.json exists in ROOT (not dist)
 ls -la manifest.json
 
 # Check manifest is valid JSON
 cat manifest.json | json_pp
 ```
 
-### Issue 2: Service Worker Error
+### Issue 2: Files Not Found
 
-**Symptoms**: "Service worker registration failed"
+**Symptoms**: "Could not load popup.html"
 
 **Solution**:
 ```bash
-# Rebuild TypeScript
-npm run clean
+# Rebuild and copy assets
 npm run build
 
-# Reload extension
+# Verify dist folder
+ls -la dist/
+# Should see: popup.html, warning.html, rules.json, etc.
 ```
 
-### Issue 3: Module Not Found
+### Issue 3: Icons Missing
 
-**Symptoms**: "Cannot find module './types'"
+**Symptoms**: Extension shows default icon
 
 **Solution**:
 ```bash
-# Check imports use correct path
-# In background.ts:
-import type { ... } from './types';  # ✅ Correct
+# Check icons exist
+ls -la icons/
 
-# Rebuild
+# Copy icons manually if needed
+npm run copy-icons
+
+# Or rebuild
 npm run build
 ```
 
-### Issue 4: Permission Denied
+### Issue 4: Changes Not Reflecting
 
-**Symptoms**: Cannot read property 'downloads'
+**Symptoms**: Code changes don't appear
 
 **Solution**:
-- Check `manifest.json` has `downloads` permission
-- Reload extension
+1. Rebuild: `npm run build`
+2. Go to `chrome://extensions`
+3. Click **Reload** button on SecureGuard Pro
+4. Hard refresh pages (Ctrl+Shift+R)
 
-### Issue 5: Types Not Working
+### Issue 5: Permission Denied (Windows)
 
-**Symptoms**: No autocomplete in VS Code
+**Symptoms**: Cannot copy files
 
 **Solution**:
 ```bash
-# Install Chrome types
-npm install --save-dev @types/chrome
+# Run as Administrator
+# Or install cpy-cli
+npm install --save-dev cpy-cli
 
-# Restart VS Code
-# Cmd+Shift+P → "Reload Window"
+# Update package.json scripts to use cpy
 ```
 
 ## 📊 Verify Everything Works
@@ -290,7 +336,8 @@ npm install --save-dev @types/chrome
 Run this checklist:
 
 - [ ] `npm install` completed without errors
-- [ ] `npm run build` creates dist/ folder
+- [ ] `npm run build` creates dist/ folder with all files
+- [ ] `dist/` contains: .js, .html, .json, icons/
 - [ ] Extension loads in Chrome without errors
 - [ ] Popup opens and shows UI
 - [ ] Can toggle features on/off
@@ -312,6 +359,7 @@ Run this checklist:
 1. Edit `src/background.ts` để thêm features
 2. Update `src/types.ts` nếu cần types mới
 3. Modify `popup.html` cho UI changes
+4. Run `npm run build` sau mỗi thay đổi
 
 ### Prepare for Production
 
@@ -319,8 +367,11 @@ Run this checklist:
 # Build optimized version
 npm run build
 
-# Zip for Chrome Web Store
-zip -r secureguard-pro-v2.zip . -x "node_modules/*" -x "src/*" -x ".git/*"
+# Test thoroughly
+# Then package for Chrome Web Store
+
+# Create zip (exclude source files)
+zip -r secureguard-pro-v2.zip dist/ manifest.json icons/ rules.json popup.html warning.html -x "*.map"
 ```
 
 ## 📞 Need Help?
@@ -378,10 +429,36 @@ Bạn đã cài đặt thành công nếu:
 
 1. ✅ No errors trong `npm install`
 2. ✅ No errors trong `npm run build`
-3. ✅ Extension appears trong chrome://extensions
-4. ✅ Popup mở và hoạt động
-5. ✅ Console log: "🛡️ SecureGuard Pro background service worker loaded"
-6. ✅ Features hoạt động (tracking block, scan, etc.)
+3. ✅ `dist/` folder contains all necessary files
+4. ✅ Extension appears trong chrome://extensions
+5. ✅ Popup mở và hoạt động
+6. ✅ Console log: "🛡️ SecureGuard Pro background service worker loaded"
+7. ✅ Features hoạt động (tracking block, scan, etc.)
+
+## 📁 Final Structure
+
+```
+secureguard-pro-typescript/
+├── src/                    # TypeScript source
+│   ├── types.ts
+│   ├── background.ts
+│   ├── popup.ts
+│   └── content.ts
+├── dist/                   # Built output (auto-generated)
+│   ├── *.js               # Compiled JavaScript
+│   ├── *.js.map           # Source maps
+│   ├── *.html             # Copied HTML
+│   ├── *.json             # Copied JSON
+│   └── icons/             # Copied icons
+├── icons/                  # Source icons
+├── manifest.json          # Extension manifest (root)
+├── popup.html             # Popup HTML (root)
+├── warning.html           # Warning page (root)
+├── rules.json             # Blocking rules (root)
+├── package.json           # NPM config
+├── tsconfig.json          # TypeScript config
+└── README-TypeScript.md   # Documentation
+```
 
 ---
 

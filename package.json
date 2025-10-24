@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "Browser security extension with TypeScript",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy-assets",
     "watch": "tsc --watch",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean",
+    "copy-assets": "npm run copy-html && npm run copy-json && npm run copy-icons",
+    "copy-html": "cp popup.html warning.html dist/",
+    "copy-json": "cp rules.json manifest.json dist/",
+    "copy-icons": "cp -r icons dist/",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"src/**/*.ts\""
   },
