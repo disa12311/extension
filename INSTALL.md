@@ -105,35 +105,44 @@ npm run build
 ✓ Icons copied
 ```
 
-Sau khi build, cấu trúc `dist/` sẽ như sau:
+Sau khi build, cấu trúc sẽ như sau:
 
 ```
-dist/
-├── types.js
-├── types.js.map
-├── background.js
-├── background.js.map
-├── popup.js
-├── popup.js.map
-├── content.js
-├── content.js.map
-├── popup.html           ✅ Copied from root
-├── warning.html         ✅ Copied from root
-├── rules.json          ✅ Copied from root
-├── manifest.json       ✅ Copied from root
-└── icons/              ✅ Copied from root
-    ├── icon16.png
-    ├── icon48.png
-    └── icon128.png
+project-root/
+├── src/                    # TypeScript source (KHÔNG đụng)
+├── dist/                   # Built files
+│   ├── *.js               # Compiled JavaScript
+│   ├── *.js.map           # Source maps
+│   └── icons/             # Copied icons
+├── icons/                  # Source icons (ở root)
+├── popup.html             # Popup UI (ở root)
+├── warning.html           # Warning page (ở root)
+├── rules.json             # Blocking rules (ở root)
+├── manifest.json          # Extension manifest (ở root) ⭐
+├── package.json
+└── tsconfig.json
 ```
 
-### 🗺️ Tại Sao Copy Assets?
+**QUAN TRỌNG**: 
+- `manifest.json` ở **ROOT** (không copy vào dist)
+- HTML files ở **ROOT** 
+- `rules.json` ở **ROOT**
+- Icons ở **ROOT** trong folder `icons/`
+- Chỉ JavaScript files (`.js` và `.js.map`) ở trong `dist/`
 
-- **HTML files**: Extension cần `popup.html` và `warning.html` để hiển thị UI
-- **JSON files**: 
-  - `rules.json` - Chứa rules chặn tracking
-  - `manifest.json` - Chrome extension manifest
-- **Icons**: Extension icons cho toolbar và settings
+### 🗺️ Tại Sao Cấu Trúc Này?
+
+**manifest.json ở ROOT vì:**
+- Chrome đọc manifest từ folder bạn load (root)
+- Manifest không thể ở trong subfolder
+
+**HTML/JSON/Icons ở ROOT vì:**
+- Manifest trỏ đến paths relative từ root: `popup.html`, `icons/icon16.png`
+- Dễ quản lý và debug hơn
+
+**JavaScript ở dist/ vì:**
+- TypeScript compile vào dist/
+- Giữ source code (src/) tách biệt với compiled code (dist/)
 
 ### Nếu Có Lỗi Build
 
@@ -145,30 +154,34 @@ npm install --save-dev @types/chrome
 
 #### Error: cp command not found (Windows)
 
-Nếu bạn dùng Windows, update `package.json`:
+Nếu bạn dùng Windows và gặp lỗi `cp`, có 2 cách:
+
+**Cách 1: Dùng Git Bash** (khuyến nghị)
+- Cài Git for Windows (đi kèm Git Bash)
+- Chạy commands trong Git Bash
+
+**Cách 2: Update package.json cho Windows CMD**
 
 ```json
 "scripts": {
-  "copy-html": "copy popup.html warning.html dist\\",
-  "copy-json": "copy rules.json manifest.json dist\\",
-  "copy-icons": "xcopy /E /I icons dist\\icons"
+  "copy-html": "copy popup.html dist\\ & copy warning.html dist\\",
+  "copy-json": "copy rules.json dist\\",
+  "copy-icons": "if not exist dist\\icons mkdir dist\\icons & copy icons\\* dist\\icons\\"
 }
 ```
 
-Hoặc cài `npm-run-all`:
+**Cách 3: Dùng cross-platform tools**
 
 ```bash
-npm install --save-dev npm-run-all
+npm install --save-dev cpy-cli
 ```
 
-Rồi update scripts:
-
+Update scripts:
 ```json
 "scripts": {
-  "build": "tsc && npm-run-all copy-*",
   "copy-html": "cpy popup.html warning.html dist",
-  "copy-json": "cpy rules.json manifest.json dist",
-  "copy-icons": "cpy icons/** dist"
+  "copy-json": "cpy rules.json dist",
+  "copy-icons": "cpy icons/*.png dist/icons"
 }
 ```
 
@@ -445,20 +458,36 @@ secureguard-pro-typescript/
 │   ├── popup.ts
 │   └── content.ts
 ├── dist/                   # Built output (auto-generated)
-│   ├── *.js               # Compiled JavaScript
-│   ├── *.js.map           # Source maps
-│   ├── *.html             # Copied HTML
-│   ├── *.json             # Copied JSON
-│   └── icons/             # Copied icons
-├── icons/                  # Source icons
-├── manifest.json          # Extension manifest (root)
-├── popup.html             # Popup HTML (root)
-├── warning.html           # Warning page (root)
-├── rules.json             # Blocking rules (root)
+│   ├── types.js           # Compiled JavaScript
+│   ├── types.js.map       # Source maps
+│   ├── background.js
+│   ├── background.js.map
+│   ├── popup.js
+│   ├── popup.js.map
+│   ├── content.js
+│   └── content.js.map
+├── icons/                  # Extension icons (root)
+│   ├── icon16.png
+│   ├── icon48.png
+│   └── icon128.png
+├── manifest.json          # Extension manifest (ROOT ⭐)
+├── popup.html             # Popup HTML (ROOT ⭐)
+├── warning.html           # Warning page (ROOT ⭐)
+├── rules.json             # Blocking rules (ROOT ⭐)
 ├── package.json           # NPM config
 ├── tsconfig.json          # TypeScript config
-└── README-TypeScript.md   # Documentation
+├── .eslintrc.json         # ESLint config
+├── .prettierrc.json       # Prettier config
+├── .gitignore             # Git ignore
+├── README-TypeScript.md   # Documentation
+└── INSTALL.md             # Installation guide
 ```
+
+**Key Points:**
+- ✅ Load extension từ folder **ROOT** (chứa manifest.json)
+- ✅ TypeScript compiles từ `src/` → `dist/`
+- ✅ HTML, JSON, icons ở ROOT (manifest trỏ đến chúng)
+- ✅ Chỉ `.js` và `.js.map` ở trong `dist/`
 
 ---
 
