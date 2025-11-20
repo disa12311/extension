@@ -2,7 +2,7 @@
 console.log('🎥 YouTube Video Fix Pro đã được kích hoạt!');
 
 // Cấu hình mặc định
-const DEFAULT_CONFIG = {
+const YT_FIX_CONFIG = {
   autoQuality: true,
   preferredQuality: 'hd1080',
   forceCodec: 'vp9',
@@ -13,12 +13,12 @@ const DEFAULT_CONFIG = {
   skipAds: true
 };
 
-let config = { ...DEFAULT_CONFIG };
+let config = { ...YT_FIX_CONFIG };
 
 // Load cấu hình từ storage
 chrome.storage.sync.get('config', (data) => {
   if (data.config) {
-    config = { ...DEFAULT_CONFIG, ...data.config };
+    config = { ...YT_FIX_CONFIG, ...data.config };
   }
   init();
 });

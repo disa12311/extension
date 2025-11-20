@@ -19,11 +19,6 @@ chrome.runtime.onInstalled.addListener((details) => {
     };
     
     chrome.storage.sync.set({ config: defaultConfig });
-    
-    // Mở tab chào mừng (optional)
-    chrome.tabs.create({
-      url: 'https://www.youtube.com'
-    });
   }
 });
 

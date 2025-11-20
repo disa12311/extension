@@ -1,1 +1,92 @@
-// Popup logicconst DEFAULT_CONFIG = {  autoQuality: true,  preferredQuality: 'hd1080',  forceCodec: true,  disableAutoplay: false,  speedControl: true,  bufferFix: true,  theaterMode: false,  skipAds: true};// Load c?u h�nh hi?n t?ichrome.storage.sync.get('config', (data) => {  const config = data.config || DEFAULT_CONFIG;    // Set toggle states  document.getElementById('autoQuality').classList.toggle('active', config.autoQuality);  document.getElementById('forceCodec').classList.toggle('active', config.forceCodec);  document.getElementById('bufferFix').classList.toggle('active', config.bufferFix);  document.getElementById('speedControl').classList.toggle('active', config.speedControl);  document.getElementById('skipAds').classList.toggle('active', config.skipAds);  document.getElementById('theaterMode').classList.toggle('active', config.theaterMode);  document.getElementById('disableAutoplay').classList.toggle('active', config.disableAutoplay);    // Set select value  document.getElementById('preferredQuality').value = config.preferredQuality;});// Toggle click handlersdocument.querySelectorAll('.toggle').forEach(toggle => {  toggle.addEventListener('click', () => {    toggle.classList.toggle('active');  });});// Save buttondocument.getElementById('saveBtn').addEventListener('click', () => {  const config = {    autoQuality: document.getElementById('autoQuality').classList.contains('active'),    preferredQuality: document.getElementById('preferredQuality').value,    forceCodec: document.getElementById('forceCodec').classList.contains('active'),    disableAutoplay: document.getElementById('disableAutoplay').classList.contains('active'),    speedControl: document.getElementById('speedControl').classList.contains('active'),    bufferFix: document.getElementById('bufferFix').classList.contains('active'),    theaterMode: document.getElementById('theaterMode').classList.contains('active'),    skipAds: document.getElementById('skipAds').classList.contains('active')  };    chrome.storage.sync.set({ config }, () => {    // Show success message    const btn = document.getElementById('saveBtn');    const originalText = btn.textContent;    btn.textContent = '? �� luu!';    btn.style.background = 'rgba(76, 175, 80, 0.4)';        setTimeout(() => {      btn.textContent = originalText;      btn.style.background = '';    }, 2000);        // Reload all YouTube tabs    chrome.tabs.query({ url: '*://*.youtube.com/*' }, (tabs) => {      tabs.forEach(tab => {        chrome.tabs.reload(tab.id);      });    });  });});// Reset buttondocument.getElementById('resetBtn').addEventListener('click', () => {  if (confirm('B?n c� ch?c mu?n reset v? c�i d?t m?c d?nh?')) {    chrome.storage.sync.set({ config: DEFAULT_CONFIG }, () => {      location.reload();    });  }});
+// Popup logic cho YouTube Video Fix Pro
+const DEFAULT_CONFIG = {
+  autoQuality: true,
+  preferredQuality: 'hd1080',
+  forceCodec: true,
+  disableAutoplay: false,
+  speedControl: true,
+  bufferFix: true,
+  theaterMode: false,
+  skipAds: true
+};
+
+// Load cấu hình khi popup mở
+document.addEventListener('DOMContentLoaded', () => {
+  loadSettings();
+  
+  // Event listeners cho các buttons
+  document.getElementById('saveBtn').addEventListener('click', saveSettings);
+  document.getElementById('resetBtn').addEventListener('click', resetSettings);
+});
+
+// Load settings từ storage
+function loadSettings() {
+  chrome.storage.sync.get('config', (data) => {
+    const config = data.config || DEFAULT_CONFIG;
+    
+    // Set checkboxes
+    document.getElementById('autoQuality').checked = config.autoQuality;
+    document.getElementById('forceCodec').checked = config.forceCodec;
+    document.getElementById('bufferFix').checked = config.bufferFix;
+    document.getElementById('speedControl').checked = config.speedControl;
+    document.getElementById('skipAds').checked = config.skipAds;
+    document.getElementById('theaterMode').checked = config.theaterMode;
+    document.getElementById('disableAutoplay').checked = config.disableAutoplay;
+    
+    // Set select
+    document.getElementById('preferredQuality').value = config.preferredQuality;
+  });
+}
+
+// Save settings
+function saveSettings() {
+  const config = {
+    autoQuality: document.getElementById('autoQuality').checked,
+    preferredQuality: document.getElementById('preferredQuality').value,
+    forceCodec: document.getElementById('forceCodec').checked,
+    disableAutoplay: document.getElementById('disableAutoplay').checked,
+    speedControl: document.getElementById('speedControl').checked,
+    bufferFix: document.getElementById('bufferFix').checked,
+    theaterMode: document.getElementById('theaterMode').checked,
+    skipAds: document.getElementById('skipAds').checked
+  };
+  
+  chrome.storage.sync.set({ config }, () => {
+    // Show success animation
+    const btn = document.getElementById('saveBtn');
+    const originalText = btn.textContent;
+    
+    btn.textContent = '✅ Đã lưu!';
+    btn.classList.add('success-animation');
+    
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.classList.remove('success-animation');
+    }, 2000);
+    
+    // Reload tất cả YouTube tabs
+    chrome.tabs.query({ url: '*://*.youtube.com/*' }, (tabs) => {
+      tabs.forEach(tab => {
+        chrome.tabs.reload(tab.id);
+      });
+    });
+  });
+}
+
+// Reset về mặc định
+function resetSettings() {
+  if (confirm('Bạn có chắc muốn reset về cài đặt mặc định?')) {
+    chrome.storage.sync.set({ config: DEFAULT_CONFIG }, () => {
+      loadSettings();
+      
+      const btn = document.getElementById('resetBtn');
+      const originalText = btn.textContent;
+      
+      btn.textContent = '✅ Đã reset!';
+      
+      setTimeout(() => {
+        btn.textContent = originalText;
+      }, 2000);
+    });
+  }
+}

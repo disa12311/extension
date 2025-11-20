@@ -1,1 +1,371 @@
-<!DOCTYPE html><html lang="vi"><head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>YouTube Video Fix Pro</title>  <style>    * {      margin: 0;      padding: 0;      box-sizing: border-box;    }        body {      width: 320px;      padding: 16px;      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);      color: white;    }        .header {      text-align: center;      margin-bottom: 20px;    }        .header h1 {      font-size: 20px;      margin-bottom: 4px;    }        .header p {      font-size: 12px;      opacity: 0.9;    }        .section {      background: rgba(255, 255, 255, 0.1);      backdrop-filter: blur(10px);      border-radius: 12px;      padding: 14px;      margin-bottom: 12px;    }        .section-title {      font-size: 13px;      font-weight: 600;      margin-bottom: 10px;      text-transform: uppercase;      letter-spacing: 0.5px;      opacity: 0.9;    }        .option {      display: flex;      justify-content: space-between;      align-items: center;      margin-bottom: 10px;    }        .option:last-child {      margin-bottom: 0;    }        .option label {      font-size: 14px;      cursor: pointer;      flex: 1;    }        .toggle {      position: relative;      width: 44px;      height: 24px;      background: rgba(255, 255, 255, 0.2);      border-radius: 12px;      cursor: pointer;      transition: all 0.3s;    }        .toggle.active {      background: #4CAF50;    }        .toggle::after {      content: '';      position: absolute;      width: 18px;      height: 18px;      background: white;      border-radius: 50%;      top: 3px;      left: 3px;      transition: all 0.3s;    }        .toggle.active::after {      left: 23px;    }        select {      background: rgba(255, 255, 255, 0.2);      color: white;      border: 1px solid rgba(255, 255, 255, 0.3);      border-radius: 6px;      padding: 6px 10px;      font-size: 13px;      cursor: pointer;      outline: none;      width: 100%;      margin-top: 6px;    }        select option {      background: #764ba2;      color: white;    }        .status {      text-align: center;      padding: 12px;      background: rgba(76, 175, 80, 0.2);      border-radius: 8px;      font-size: 13px;      margin-bottom: 12px;      border: 1px solid rgba(76, 175, 80, 0.4);    }        .shortcuts {      background: rgba(255, 255, 255, 0.05);      padding: 10px;      border-radius: 8px;      font-size: 11px;      line-height: 1.6;    }        .shortcuts strong {      color: #FFD700;    }        button {      width: 100%;      padding: 10px;      background: rgba(255, 255, 255, 0.2);      border: 1px solid rgba(255, 255, 255, 0.3);      border-radius: 8px;      color: white;      font-size: 13px;      cursor: pointer;      transition: all 0.3s;      margin-top: 8px;    }        button:hover {      background: rgba(255, 255, 255, 0.3);    }        .footer {      text-align: center;      margin-top: 12px;      font-size: 11px;      opacity: 0.7;    }  </style></head><body>  <div class="header">    <h1>?? YouTube Fix Pro</h1>    <p>T?i uu tr?i nghi?m xem video</p>  </div>  <div class="status">    ? Extension dang ho?t d?ng  </div>  <div class="section">    <div class="section-title">?? Ch?t Lu?ng Video</div>        <div class="option">      <label for="autoQuality">T? d?ng ch?n ch?t lu?ng cao</label>      <div class="toggle active" id="autoQuality"></div>    </div>        <div class="option">      <label for="preferredQuality">Ch?t lu?ng uu ti�n:</label>    </div>    <select id="preferredQuality">      <option value="hd2160">4K (2160p)</option>      <option value="hd1440">2K (1440p)</option>      <option value="hd1080" selected>Full HD (1080p)</option>      <option value="hd720">HD (720p)</option>      <option value="large">480p</option>      <option value="medium">360p</option>    </select>        <div class="option" style="margin-top: 10px;">      <label for="forceCodec">Force VP9 codec (ch?t lu?ng t?t hon)</label>      <div class="toggle active" id="forceCodec"></div>    </div>  </div>  <div class="section">    <div class="section-title">? T?i Uu Ph�t Video</div>        <div class="option">      <label for="bufferFix">Fix l?i buffering/lag</label>      <div class="toggle active" id="bufferFix"></div>    </div>        <div class="option">      <label for="speedControl">�i?u khi?n t?c d? n�ng cao</label>      <div class="toggle active" id="speedControl"></div>    </div>        <div class="option">      <label for="skipAds">T? d?ng skip qu?ng c�o</label>      <div class="toggle active" id="skipAds"></div>    </div>        <div class="option">      <label for="theaterMode">Force Theater Mode</label>      <div class="toggle" id="theaterMode"></div>    </div>        <div class="option">      <label for="disableAutoplay">T?t autoplay</label>      <div class="toggle" id="disableAutoplay"></div>    </div>  </div>  <div class="section">    <div class="section-title">?? Ph�m T?t</div>    <div class="shortcuts">      <strong>Shift + ></strong> Tang t?c d? (+0.25x)<br>      <strong>Shift + <</strong> Gi?m t?c d? (-0.25x)<br>      <strong>Shift + R</strong> Reset t?c d? (1x)    </div>  </div>  <button id="saveBtn">?? Luu C�i �?t</button>  <button id="resetBtn">?? Reset M?c �?nh</button>  <div class="footer">    Made with ?? for YouTube lovers  </div>  <script src="popup.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Video Fix Pro</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      width: 360px;
+      min-height: 500px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+    }
+    
+    .header h1 {
+      font-size: 22px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    
+    .header p {
+      font-size: 13px;
+      opacity: 0.95;
+    }
+    
+    .content {
+      padding: 16px;
+    }
+    
+    .status {
+      background: rgba(76, 175, 80, 0.15);
+      border: 1px solid rgba(76, 175, 80, 0.4);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      text-align: center;
+      font-size: 14px;
+      color: #4CAF50;
+    }
+    
+    .section {
+      background: #1a1a1a;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid #2a2a2a;
+    }
+    
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: #FF4444;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    
+    .setting-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .setting-item label {
+      font-size: 14px;
+      color: #e0e0e0;
+      cursor: pointer;
+      flex: 1;
+    }
+    
+    /* Custom Toggle Switch */
+    .switch {
+      position: relative;
+      width: 50px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+    
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #3a3a3a;
+      transition: 0.3s;
+      border-radius: 26px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: #FF0000;
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+    
+    /* Select dropdown */
+    .select-wrapper {
+      margin-top: 8px;
+    }
+    
+    select {
+      width: 100%;
+      background: #2a2a2a;
+      color: #fff;
+      border: 1px solid #3a3a3a;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+    }
+    
+    select:hover {
+      border-color: #FF0000;
+    }
+    
+    select:focus {
+      border-color: #FF0000;
+      box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.1);
+    }
+    
+    /* Shortcuts info */
+    .shortcuts {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+    
+    .shortcuts div {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    
+    .shortcuts div:last-child {
+      margin-bottom: 0;
+    }
+    
+    .shortcuts .key {
+      background: #2a2a2a;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #FF4444;
+    }
+    
+    /* Buttons */
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    
+    button {
+      flex: 1;
+      padding: 12px;
+      background: #FF0000;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    button:hover {
+      background: #CC0000;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button.secondary {
+      background: #2a2a2a;
+    }
+    
+    button.secondary:hover {
+      background: #3a3a3a;
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 12px;
+      font-size: 11px;
+      color: #666;
+    }
+    
+    /* Success animation */
+    @keyframes success {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .success-animation {
+      animation: success 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎥 YouTube Fix Pro</h1>
+    <p>Tối ưu trải nghiệm xem video</p>
+  </div>
+
+  <div class="content">
+    <div class="status">
+      ✅ Extension đang hoạt động
+    </div>
+
+    <div class="section">
+      <div class="section-title">🎬 Chất Lượng Video</div>
+      
+      <div class="setting-item">
+        <label for="autoQuality">Tự động chọn chất lượng cao</label>
+        <label class="switch">
+          <input type="checkbox" id="autoQuality">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="setting-item">
+        <label>Chất lượng ưu tiên</label>
+      </div>
+      <div class="select-wrapper">
+        <select id="preferredQuality">
+          <option value="hd2160">4K (2160p)</option>
+          <option value="hd1440">2K (1440p)</option>
+          <option value="hd1080">Full HD (1080p)</option>
+          <option value="hd720">HD (720p)</option>
+          <option value="large">480p</option>
+          <option value="medium">360p</option>
+        </select>
+      </div>
+      
+      <div class="setting-item" style="margin-top: 12px;">
+        <label for="forceCodec">Force VP9 codec (chất lượng tốt)</label>
+        <label class="switch">
+          <input type="checkbox" id="forceCodec">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">⚡ Tối Ưu Phát Video</div>
+      
+      <div class="setting-item">
+        <label for="bufferFix">Fix lỗi buffering/lag</label>
+        <label class="switch">
+          <input type="checkbox" id="bufferFix">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="setting-item">
+        <label for="speedControl">Phím tắt tốc độ</label>
+        <label class="switch">
+          <input type="checkbox" id="speedControl">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="setting-item">
+        <label for="skipAds">Tự động skip quảng cáo</label>
+        <label class="switch">
+          <input type="checkbox" id="skipAds">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="setting-item">
+        <label for="theaterMode">Force Theater Mode</label>
+        <label class="switch">
+          <input type="checkbox" id="theaterMode">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="setting-item">
+        <label for="disableAutoplay">Tắt autoplay</label>
+        <label class="switch">
+          <input type="checkbox" id="disableAutoplay">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">⌨️ Phím Tắt</div>
+      <div class="shortcuts">
+        <div>
+          <span>Tăng tốc độ</span>
+          <span class="key">Shift + &gt;</span>
+        </div>
+        <div>
+          <span>Giảm tốc độ</span>
+          <span class="key">Shift + &lt;</span>
+        </div>
+        <div>
+          <span>Reset tốc độ</span>
+          <span class="key">Shift + R</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button id="saveBtn">💾 Lưu</button>
+      <button id="resetBtn" class="secondary">🔄 Reset</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    v1.0.1 • Made with ❤️
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
