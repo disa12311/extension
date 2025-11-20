@@ -174,28 +174,38 @@ function fixBuffering() {
 
 // Cải thiện performance
 function improvePerformance() {
-  // Disable animations không cần thiết
-  const style = document.createElement('style');
-  style.textContent = `
-    /* Tắt animations lag */
-    .ytp-spinner {
-      display: none !important;
+  // Đợi DOM ready
+  const addStyles = () => {
+    if (!document.head) {
+      setTimeout(addStyles, 100);
+      return;
     }
     
-    /* Smooth playback */
-    video {
-      image-rendering: crisp-edges;
-      image-rendering: -webkit-optimize-contrast;
-    }
-    
-    /* Theater mode cải thiện */
-    ${config.theaterMode ? `
-      #player-theater-container {
-        max-width: none !important;
+    // Disable animations không cần thiết
+    const style = document.createElement('style');
+    style.textContent = `
+      /* Tắt animations lag */
+      .ytp-spinner {
+        display: none !important;
       }
-    ` : ''}
-  `;
-  document.head.appendChild(style);
+      
+      /* Smooth playback */
+      video {
+        image-rendering: crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+      }
+      
+      /* Theater mode cải thiện */
+      ${config.theaterMode ? `
+        #player-theater-container {
+          max-width: none !important;
+        }
+      ` : ''}
+    `;
+    document.head.appendChild(style);
+  };
+  
+  addStyles();
   
   // Disable autoplay nếu được config
   if (config.disableAutoplay) {
@@ -258,6 +268,12 @@ if (config.skipAds) {
 
 // Hiển thị thông báo
 function showNotification(message) {
+  // Kiểm tra body có sẵn chưa
+  if (!document.body) {
+    setTimeout(() => showNotification(message), 100);
+    return;
+  }
+  
   const existing = document.querySelector('.ytfix-notification');
   if (existing) existing.remove();
   
@@ -288,31 +304,40 @@ function showNotification(message) {
 }
 
 // Thêm CSS animations
-const animStyle = document.createElement('style');
-animStyle.textContent = `
-  @keyframes slideIn {
-    from {
-      transform: translateX(400px);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
+const addAnimations = () => {
+  if (!document.head) {
+    setTimeout(addAnimations, 100);
+    return;
   }
   
-  @keyframes slideOut {
-    from {
-      transform: translateX(0);
-      opacity: 1;
+  const animStyle = document.createElement('style');
+  animStyle.textContent = `
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
-    to {
-      transform: translateX(400px);
-      opacity: 0;
+    
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
     }
-  }
-`;
-document.head.appendChild(animStyle);
+  `;
+  document.head.appendChild(animStyle);
+};
+
+addAnimations();
 
 // Log status
 console.log('✅ YouTube Video Fix Pro đã sẵn sàng!');
